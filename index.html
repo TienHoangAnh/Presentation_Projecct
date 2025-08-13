@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wukong: The Lost Power - Game Development Presentation</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Noto+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', 'Noto Sans', sans-serif;
+            line-height: 1.6;
+        }
+        .slide {
+            min-height: 100vh;
+            padding: 3rem 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d1810 50%, #1a1a1a 100%);
+        }
+        .gold-text {
+            background: linear-gradient(45deg, #FFD700, #FFA500, #FFD700);
+            background-size: 200% 200%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 3s ease-in-out infinite;
+        }
+        @keyframes shimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+        .slide-number {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            background: rgba(255, 215, 0, 0.2);
+            color: #FFD700;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-weight: 600;
+        }
+        .skill-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #1a1a1a;
+            margin: 0 auto 1rem;
+        }
+        .chapter-card {
+            background: rgba(255, 215, 0, 0.1);
+            border: 2px solid #FFD700;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            transition: all 0.3s ease;
+        }
+        .chapter-card:hover {
+            background: rgba(255, 215, 0, 0.2);
+            transform: translateY(-5px);
+        }
+        .gameplay-loop {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        .loop-step {
+            background: rgba(255, 215, 0, 0.1);
+            border: 2px solid #FFD700;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            text-align: center;
+            min-width: 200px;
+            position: relative;
+        }
+        .loop-arrow {
+            position: absolute;
+            right: -2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            color: #FFD700;
+        }
+        @media print {
+            .slide {
+                break-inside: avoid;
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="gradient-bg text-white">
+
+    <!-- Slide 1: Tiêu đề -->
+    <div class="slide relative">
+        <div class="slide-number">01/15</div>
+        <div class="text-center max-w-6xl mx-auto">
+            <h1 class="text-8xl font-black gold-text mb-8">WUKONG</h1>
+            <h2 class="text-4xl font-bold text-red-400 mb-6">THE LOST POWER</h2>
+            <div class="grid grid-cols-2 gap-8 mt-12">
+                <div class="text-left">
+                    <h3 class="text-2xl font-semibold mb-4 text-yellow-400">Thông tin Game</h3>
+                    <ul class="text-xl space-y-2">
+                        <li><i class="fas fa-gamepad text-yellow-400 mr-3"></i><strong>Thể loại:</strong> Action RPG</li>
+                        <li><i class="fas fa-cogs text-yellow-400 mr-3"></i><strong>Engine:</strong> Unity 6</li>
+                        <li><i class="fas fa-desktop text-yellow-400 mr-3"></i><strong>Nền tảng:</strong> PC, Console</li>
+                        <li><i class="fas fa-users text-yellow-400 mr-3"></i><strong>Nhóm phát triển:</strong> Nguyen Van Tien cùng đồng bọn AI</li>
+                    </ul>
+                </div>
+                <div class="text-center">
+                    <div class="w-48 h-48 mx-auto bg-gradient-to-br from-yellow-400 to-red-600 rounded-full flex items-center justify-center text-6xl">
+                        <i class="fas fa-mask text-black"></i>
+                    </div>
+                    <p class="mt-4 text-gray-300 italic">Đồ án tốt nghiệp - Khoa Công nghệ Thông tin</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: Tóm tắt ý tưởng -->
+    <div class="slide relative">
+        <div class="slide-number">02/15</div>
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-5xl font-bold gold-text mb-8 text-center">Tóm tắt Ý tưởng</h2>
+            
+            <div class="bg-gray-800 bg-opacity-80 rounded-2xl p-8 mb-8 border-2 border-yellow-400">
+                <h3 class="text-3xl font-semibold text-red-400 mb-4">Elevator Pitch</h3>
+                <p class="text-2xl text-gray-200 leading-relaxed">
+                    "Một hành trình cảm động về việc tìm lại sức mạnh đã mất của Tôn Ngộ Không, 
+                    nơi người chơi không chỉ chiến đấu mà còn khám phá lại chính bản thân mình 
+                    thông qua những thử thách đầy thách thức và ý nghĩa."
+                </p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-3xl font-semibold text-yellow-400 mb-4">
+                        <i class="fas fa-star mr-3"></i>Điểm Bán Hàng Độc Đáo
+                    </h3>
+                    <ul class="text-xl space-y-3">
+                        <li><i class="fas fa-check text-green-400 mr-3"></i>Hệ thống Clone AI độc đáo</li>
+                        <li><i class="fas fa-check text-green-400 mr-3"></i>Adaptive Boss AI thông minh</li>
+                        <li><i class="fas fa-check text-green-400 mr-3"></i>Cốt truyện sâu sắc về tự khám phá</li>
+                        <li><i class="fas fa-check text-green-400 mr-3"></i>Kết hợp Combat và Puzzle sáng tạo</li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-3xl font-semibold text-yellow-400 mb-4">
+                        <i class="fas fa-lightbulb mr-3"></i>Nguồn Cảm Hứng
+                    </h3>
+                    <ul class="text-xl space-y-3">
+                        <li><i class="fas fa-book text-blue-400 mr-3"></i>Tiểu thuyết "Tây Du Ký" cổ điển</li>
+                        <li><i class="fas fa-gamepad text-blue-400 mr-3"></i>God of War series</li>
+                        <li><i class="fas fa-sword text-blue-400 mr-3"></i>Dark Souls gameplay</li>
+                        <li><i class="fas fa-dragon text-blue-400 mr-3"></i>Black Myth: Wukong aesthetic</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Mục tiêu & đối tượng -->
+    <div class="slide relative">
+        <div class="slide-number">03/15</div>
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-5xl font-bold gold-text mb-8 text-center">Mục tiêu & Đối tượng Người chơi</h2>
+            
+            <div class="grid grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-3xl font-semibold text-yellow-400 mb-6">
+                        <i class="fas fa-users mr-3"></i>Đối tượng Người chơi
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="bg-gray-800 bg-opacity-80 rounded-lg p-4 border-l-4 border-yellow-400">
+                            <h4 class="text-xl font-semibold text-white mb-2">Game thủ Hardcore (25-35 tuổi)</h4>
+                            <p class="text-gray-300">Yêu thích thử thách cao, gameplay phức tạp</p>
+                        </div>
+                        <div class="bg-gray-800 bg-opacity-80 rounded-lg p-4 border-l-4 border-red-400">
+                            <h4 class="text-xl font-semibold text-white mb-2">Người yêu văn hóa Á Đông</h4>
+                            <p class="text-gray-300">Quan tâm đến thần thoại và truyền thuyết</p>
+                        </div>
+                        <div class="bg-gray-800 bg-opacity-80 rounded-lg p-4 border-l-4 border-green-400">
+                            <h4 class="text-xl font-semibold text-white mb-2">Fan Action-RPG</h4>
+                            <p class="text-gray-300">Thích sự kết hợp giữa hành động và nhập vai</p>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-3xl font-semibold text-yellow-400 mb-6">
+                        <i class="fas fa-target mr-3"></i>Mục tiêu Trải nghiệm
+                    </h3>
+                    <div class="space-y-6">
+                        <div class="text-center">
+                            <div class="w-24 h-24 bg-red-600 rounded-full flex items-center justify-center text-4xl mx-auto mb-4">
+                                <i class="fas fa-heart text-white"></i>
+                            </div>
+                            <h4 class="text-xl font-semibold mb-2">Cảm xúc</h4>
+                            <p class="text-gray-300">Hồi hộp, thách thức, cảm động</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-24 h-24 bg-blue-600 rounded-full flex items-center justify-center text-4xl mx-auto mb-4">
+                                <i class="fas fa-brain text-white"></i>
+                            </div>
+                            <h4 class="text-xl font-semibold mb-2">Kỹ năng</h4>
+                            <p class="text-gray-300">Tư duy chiến thuật, phản xạ nhanh</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-24 h-24 bg-purple-600 rounded-full flex items-center justify-center text-4xl mx-auto mb-4">
+                                <i class="fas fa-book-open text-white"></i>
+                            </div>
+                            <h4 class="text-xl font-semibold mb-2">Câu chuyện</h4>
+                            <p class="text-gray-300">Hành trình tự khám phá bản thân</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Cốt truyện tổng quan -->
+    <div class="slide relative">
+        <div class="slide-number">04/15</div>
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-5xl font-bold gold-text mb-8 text-center">Cốt truyện Tổng quan</h2>
+            
+            <div class="grid grid-cols-2 gap-8 mb-8">
+                <div>
+                    <h3 class="text-3xl font-semibold text-yellow-400 mb-4">
+                        <i class="fas fa-scroll mr-3"></i>Bối cảnh
+                    </h3>
+                    <div class="bg-gray-800 bg-opacity-80 rounded-lg p-6 border-2 border-gray-600">
+                        <p class="text-xl text-gray-200 leading-relaxed mb-4">
+                            Sau cuộc hành trình Tây Du, Tôn Ngộ Không đã trở thành Phật. Tuy nhiên, một thế lực đen tối bí ẩn 
+                            đã đánh cắp sức mạnh và ký ức của ông, khiến ông quên đi chính mình.
+                        </p>
+                        <p class="text-xl text-gray-200 leading-relaxed">
+                            Cây gậy Như Ý cũng biến mất, để lại chỉ một mảnh vỡ nhỏ. Wukong phải bắt đầu hành trình 
+                            tìm lại sức mạnh, ký ức và quan trọng nhất là bản thân thực sự của mình.
+                        </p>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-3xl font-semibold text-red-400 mb-4">
+                        <i class="fas fa-exclamation-triangle mr-3"></i>Xung đột chính
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="bg-red-900 bg-opacity-50 rounded-lg p-4 border-l-4 border-red-400">
+                            <h4 class="text-xl font-semibold mb-2">Nội tại</h4>
+                            <p class="text-gray-300">Đấu tranh với chính bản thân, tìm lại bản sắc</p>
+                        </div>
+                        <div class="bg-purple-900 bg-opacity-50 rounded-lg p-4 border-l-4 border-purple-400">
+                            <h4 class="text-xl font-semibold mb-2">Ngoại tại</h4>
+                            <p class="text-gray-300">Đối đầu với thế lực đen tối và các boss mạnh</p>
+                        </div>
+                        <div class="bg-blue-900 bg-opacity-50 rounded-lg p-4 border-l-4 border-blue-400">
+                            <h4 class="text-xl font-semibold mb-2">Triết học</h4>
+                            <p class="text-gray-300">Sức mạnh thật sự đến từ đâu?</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gray-800 bg-opacity-80 rounded-2xl p-8 border-2 border-yellow-400">
+                <h3 class="text-3xl font-semibold text-yellow-400 mb-4 text-center">
+                    <i class="fas fa-bullseye mr-3"></i>Mục tiêu của Wukong
+                </h3>
+                <div class="text-center">
+                    <p class="text-2xl text-gray-200 leading-relaxed mb-4">
+                        "Không chỉ tìm lại sức mạnh và cây gậy Như Ý, mà còn hiểu được rằng 
+                        sức mạnh thật sự không nằm ở vũ khí hay phép thuật..."
+                    </p>
+                    <p class="text-2xl font-bold text-yellow-400">
+                        "...mà nằm ở trái tim và ý chí không khuất phục!"
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Các Chương/Level chính -->
+    <div class="slide relative">
+        <div class="slide-number">05/15</div>
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-5xl font-bold gold-text mb-8 text-center">5 Chương Chính của Game</h2>
+            
+            <div class="space-y-6">
+                <div class="chapter-card">
+                    <div class="flex items-center justify-between">
+                        <div class="flex-1">
+                            <h3 class="text-2xl font-bold text-yellow-400 mb-2">
+                                <i class="fas fa-mountain mr-3"></i>Chương 1: Thức Tỉnh
+                            </h3>
+                            <p class="text-lg text-gray-300 mb-2">
+                                <strong>Chủ đề:</strong> Wukong tỉnh dậy trong hang Thuỷ Liêm Động, mất hết ký ức
+                            </p>
+                            <p class="text-lg text-gray-300 mb-2">
+                                <strong>Boss:</strong> Bóng tối của chính mình (Shadow Wukong)
+                            </p>
+                            <p class="text-lg text-gray-300">
+                                <strong>Mở khóa:</strong> Kỹ năng cơ bản, mảnh đầu tiên của gậy Như Ý
+                            </p>
+                        </div>
+                        <div class="text-6xl text-yellow-400 ml-8">01</div>
+                    </div>
+                </div>
+
+                <div class="chapter-card">
+                    <div class="flex items-center justify-between">
+                        <div class="flex-1">
+                            <h3 class="text-2xl font-bold text-yellow-400 mb-2">
+                                <i class="fas fa-tree mr-3"></i>Chương 2: Rừng Mê Hoặc
+                            </h3>
+                            <p class="text-lg text-gray-300 mb-2">
+                                <strong>Chủ đề:</strong> Đối mặt với những ảo tưởng về quá khứ
+                            </p>
+                            <p class="text-lg text-gray-300 mb-2">
+                                <strong>Boss:</strong> Tinh thần cây Nhân Sâm nghìn năm
+                            </p>
+                            <p class="text-lg text-gray-300">
+                                <strong>Mở khóa:</strong> Biến hóa 72, khả năng nhìn thấu ảo tượng
+                            </p>
+                        </div>
+                        <div class="text-6xl text-green-400 ml-8">02</div>
+                    </div>
+                </div>
+
+                <div class="chapter-card">
+                    <div class="flex items-center justify-between">
+                        <div class="flex-1">
+                            <h3 class="text-2xl font-bold text-yellow-400 mb-2">
+                                <i class="fas fa-fire mr-3"></i>Chương 3: Lò Luyện Đan
+                            </h3>
+                            <p class="text-lg text-gray-300 mb-2">
+                                <strong>Chủ đề:</strong> Thử lửa để rèn luyện bản thân
+                            </p>
+                            <p class="text-lg text-gray-300 mb-2">
+                                <strong>Boss:</strong> Thái Thượng Lão Quân (phiên bản bóng tối)
+                            </p>
+                            <p class="text-lg text-gray-300">
+                                <strong>Mở khóa:</strong> Hỏa Nhãn Kim Tinh, kháng lửa
+                            </p>
+                        </div>
+                        <div class="text-6xl text-red-400 ml-8">03</div>
+                    </div>
+                </div>
+
+                <div class="chapter-card">
+                    <div class="flex items-center justify-between">
+                        <div class="flex-1">
+                            <h3 class="text-2xl font-bold text-yellow-400 mb-2">
+                                <i class="fas fa-cloud mr-3"></i>Chương 4: Thiên Đình Sa Ngã
+                            </h3>
+                            <p class="text-lg text-gray-300 mb-2">
+                                <strong>Chủ đề:</strong> Đối mặt với quá khứ nổi loạn của mình
+                            </p>
+                            <p class="text-lg text-gray-300 mb-2">
+                                <strong>Boss:</strong> Ngọc Hoàng Đại Đế bị nhiễm độc
+                            </p>
+                            <p class="text-lg text-gray-300">
+                                <strong>Mở khóa:</strong> Thần tốc 108.000 dặm, bay lượn tự do
+                            </p>
+                        </div>
+                        <div class="text-6xl text-blue-400 ml-8">04</div>
+                    </div>
+                </div>
+
+                <div class="chapter-card">
+                    <div class="flex items-center justify-between">
+                        <div class="flex-1">
+                            <h3 class="text-2xl font-bold text-yellow-400 mb-2">
+                                <i class="fas fa-crown mr-3"></i>Chương 5: Sự Thật Cuối Cùng
+                            </h3>
+                            <p class="text-lg text-gray-300 mb-2">
+                                <strong>Chủ đề:</strong> Khám phá ra thế lực đen tối chính là một phần của mình
+                            </p>
+                            <p class="text-lg text-gray-300 mb-2">
+                                <strong>Boss:</strong> "Tôn Ngộ Không hoàn hảo" - sự kết hợp tất cả sức mạnh
+                            </p>
+                            <p class="text-lg text-gray-300">
+                                <strong>Mở khóa:</strong> Sức mạnh thật sự - sự cân bằng giữa thiện và ác
+                            </p>
+                        </div>
+                        <div class="text-6xl text-purple-400 ml-8">05</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Gameplay core loop -->
+    <div class="slide relative">
+        <div class="slide-number">06/15</div>
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-5xl font-bold gold-text mb-8 text-center">Gameplay Core Loop</h2>
+            
+            <div class="gameplay-loop">
+                <div class="loop-step">
+                    <div class="skill-icon">
+                        <i class="fas fa-fist-raised"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-yellow-400 mb-2">COMBAT</h3>
+                    <p class="text-gray-300">Chiến đấu với enemies và boss</p>
+                    <div class="loop-arrow">→</div>
+                </div>
+                
+                <div class="loop-step">
+                    <div class="skill-icon">
+                        <i class="fas fa-puzzle-piece"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-blue-400 mb-2">PUZZLE</h3>
+                    <p class="text-gray-300">Giải đố môi trường và cơ chế</p>
+                    <div class="loop-arrow">→</div>
+                </div>
+                
+                <div class="loop-step">
+                    <div class="skill-icon">
+                        <i class="fas fa-arrow-up"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-green-400 mb-2">UPGRADE</h3>
+                    <p class="text-gray-300">Nâng cấp skill và thiết bị</p>
+                    <div class="loop-arrow">→</div>
+                </div>
+                
+                <div class="loop-step">
+                    <div class="skill-icon">
+                        <i class="fas fa-forward"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-purple-400 mb-2">PROGRESS</h3>
+                    <p class="text-gray-300">Tiến sang level và area mới</p>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-8 mt-12">
+                <div class="text-center">
+                    <h3 class="text-2xl font-semibold text-red-400 mb-4">
+                        <i class="fas fa-sword mr-3"></i>Combat System
+                    </h3>
+                    <ul class="text-lg text-gray-300 space-y-2">
+                        <li>• Combo chains đa dạng</li>
+                        <li>• Dodge và parry timing</li>
+                        <li>• Elemental damage</li>
+                        <li>• Boss patterns học hỏi</li>
+                    </ul>
+                </div>
+                
+                <div class="text-center">
+                    <h3 class="text-2xl font-semibold text-blue-400 mb-4">
+                        <i class="fas fa-key mr-3"></i>Puzzle Mechanics
+                    </h3>
+                    <ul class="text-lg text-gray-300 space-y-2">
+                        <li>• Environmental puzzles</li>
+                        <li>• Clone cooperation</li>
+                        <li>• Mirror mechanics</li>
+                        <li>• Memory challenges</li>
+                    </ul>
+                </div>
+                
+                <div class="text-center">
+                    <h3 class="text-2xl font-semibold text-green-400 mb-4">
+                        <i class="fas fa-map mr-3"></i>Exploration
+                    </h3>
+                    <ul class="text-lg text-gray-300 space-y-2">
+                        <li>• Hidden areas</li>
+                        <li>• Memory fragments</li>
+                        <li>• Secret bosses</li>
+                        <li>• Lore discoveries</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7: Hệ thống kỹ năng -->
+    <div class="slide relative">
+        <div class="slide-number">07/15</div>
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-5xl font-bold gold-text mb-8 text-center">Hệ thống Kỹ năng & Tiến trình</h2>
+            
+            <div class="grid grid-cols-2 gap-8 mb-8">
+                <div>
+                    <h3 class="text-3xl font-semibold text-yellow-400 mb-6">Cách mở khóa Skills</h3>
+                    <div class="space-y-4">
+                        <div class="bg-gray-800 bg-opacity-80 rounded-lg p-4 border-l-4 border-blue-400">
+                            <h4 class="text-xl font-semibold mb-2">Memory Fragments</h4>
+                            <p class="text-gray-300">Thu thập ký ức để mở khóa kỹ năng cũ</p>
+                        </div>
+                        <div class="bg-gray-800 bg-opacity-80 rounded-lg p-4 border-l-4 border-green-400">
+                            <h4 class="text-xl font-semibold mb-2">Boss Defeats</h4>
+                            <p class="text-gray-300">Đánh bại boss để học kỹ năng mới</p>
+                        </div>
+                        <div class="bg-gray-800 bg-opacity-80 rounded-lg p-4 border-l-4 border-purple-400">
+                            <h4 class="text-xl font-semibold mb-2">Environmental Mastery</h4>
+                            <p class="text-gray-300">Tương tác với môi trường để hiểu sâu hơn</p>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-3xl font-semibold text-yellow-400 mb-6">Skill Tree Categories</h3>
+                    <div class="space-y-4">
+                        <div class="bg-red-900 bg-opacity-50 rounded-lg p-4">
+                            <h4 class="text-xl font-semibold text-red-400 mb-2">Combat Skills</h4>
+                            <p class="text-gray-300">Combo attacks, weapon mastery</p>
+                        </div>
+                        <div class="bg-blue-900 bg-opacity-50 rounded-lg p-4">
+                            <h4 class="text-xl font-semibold text-blue-400 mb-2">Transformation</h4>
+                            <p class="text-gray-300">72 biến hóa, stealth abilities</p>
+                        </div>
+                        <div class="bg-green-900 bg-opacity-50 rounded-lg p-4">
+                            <h4 class="text-xl font-semibold text-green-400 mb-2">Mobility</h4>
+                            <p class="text-gray-300">Cloud jumping, wall running</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="text-3xl font-semibold text-yellow-400 mb-6 text-center">Core Skills Overview</h3>
+            <div class="grid grid-cols-4 gap-6">
+                <div class="text-center">
+                    <div class="skill-icon">
+                        <i class="fas fa-magic"></i>
+                    </div>
+                    <h4 class="text-lg font-semibold text-yellow-400 mb-2">Biến Hóa 72</h4>
+                    <p class="text-sm text-gray-300">Transform into animals, objects, or other beings</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="skill-icon">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <h4 class="text-lg font-semibold text-red-400 mb-2">Hỏa Nhãn Kim Tinh</h4>
+                    <p class="text-sm text-gray-300">See through illusions and detect weaknesses</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="skill-icon">
+                        <i class="fas fa-cloud"></i>
+                    </div>
+                    <h4 class="text-lg font-semibold text-blue-400 mb-2">Thần Tốc</h4>
+                    <p class="text-sm text-gray-300">Travel 108,000 li in one somersault</p>
+                </div>
+                
+                <div class="text-center">
+                    <div class="skill-icon">
+                        <i class="fas fa-copy"></i>
+                    </div>
+                    <h4 class="text-lg font-semibold text-purple-400 mb-2">Clone Creation</h4>
+                    <p class="text-sm text-gray-300">Create multiple copies for combat and puzzles</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 8: AI & cơ chế đặc biệt -->
+    <div class="slide relative">
+        <div class="slide-number">08/15</div>
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-5xl font-bold gold-text mb-8 text-center">AI & Cơ chế Đặc biệt</h2>
+            
+            <div class="grid grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-3xl font-semibold text-yellow-400 mb-6">
+                        <i class="fas fa-robot mr-3"></i>Clone AI System
+                    </h3>
+                    <div class="bg-gray-800 bg-opacity-80 rounded-2xl p-6 border-2 border-yellow-400 mb-6">
+                        <h4 class="text-xl font-semibold text-blue-400 mb-4">Cơ chế hoạt động:</h4>
+                        <ul class="text-lg text-gray-300 space-y-2">
+                            <li>• Clone học hỏi từ hành vi người chơi</li>
+                            <li>• Tự động hỗ trợ trong combat</li>
+                            <li>• Giải puzzle cooperative</li>
+                            <li>• Phát triển personality riêng</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-blue-900 bg-opacity-50 rounded-lg p-4">
+                        <h4 class="text-lg font-semibold text-blue-400 mb-2">Ví dụ trong game:</h4>
+                        <p class="text-gray-300">
+                            Khi người chơi thường sử dụng combo nhanh, clone sẽ học cách tấn công 
+                            liên tục. Nếu người chơi thích né tránh, clone sẽ trở thành tank.
+                        </p>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-3xl font-semibold text-red-400 mb-6">
+                        <i class="fas fa-brain mr-3"></i>Adaptive Boss AI
+                    </h3>
+                    <div class="bg-gray-800 bg-opacity-80 rounded-2xl p-6 border-2 border-red-400 mb-6">
+                        <h4 class="text-xl font-semibold text-purple-400 mb-4">Đặc điểm:</h4>
+                        <ul class="text-lg text-gray-300 space-y-2">
+                            <li>• Phân tích pattern của người chơi</li>
+                            <li>• Thay đổi chiến thuật theo thời gian</li>
+                            <li>• Học từ những lần chết trước</li>
+                            <li>• Tăng độ khó động (Dynamic Difficulty)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="bg-red-900 bg-opacity-50 rounded-lg p-4">
+                        <h4 class="text-lg font-semibold text-red-400 mb-2">Ví dụ Boss thích ứng:</h4>
+                        <p class="text-gray-300">
+                            Shadow Wukong sẽ copy lại combo mà người chơi sử dụng nhiều nhất, 
+                            buộc người chơi phải đa dạng hóa fighting style.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8">
+                <h3 class="text-3xl font-semibold text-green-400 mb-6 text-center">
+                    <i class="fas fa-cogs mr-3"></i>Cơ chế Đặc biệt Khác
+                </h3>
+                
+                <div class="grid grid-cols-3 gap-6">
+                    <div class="bg-gray-800 bg-opacity-80 rounded-lg p-6 text-center border-2 border-green-400">
+                        <div class="text-4xl text-green-400 mb-4">
+                            <i class="fas fa-mirror"></i>
+                        </div>
+                        <h4 class="text-xl font-semibold text-green-400 mb-2">Mirror World</h4>
+                        <p class="text-gray-300">Thế giới gương với luật vật lý ngược lại</p>
+                    </div>
+                    
+                    <div class="bg-gray-800 bg-opacity-80 rounded-lg p-6 text-center border-2 border-orange-400">
+                        <div class="text-4xl text-orange-400 mb-4">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h4 class="text-xl font-semibold text-orange-400 mb-2">Time Echo</h4>
+                        <p class="text-gray-300">Nhìn thấy hành động trong quá khứ</p>
+                    </div>
+                    
+                    <div class="bg-gray-800 bg-opacity-80 rounded-lg p-6 text-center border-2 border-pink-400">
+                        <div class="text-4xl text-pink-400 mb-4">
+                            <i class="fas fa-heart"></i>
+                        </div>
+                        <h4 class="text-xl font-semibold text-pink-400 mb-2">Emotion System</h4>
+                        <p class="text-gray-300">Cảm xúc ảnh hưởng đến skill power</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 9: Đồ họa & Âm thanh -->
+    <div class="slide relative">
+        <div class="slide-number">09/15</div>
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-5xl font-bold gold-text mb-8 text-center">Đồ họa & Âm thanh</h2>
+            
+            <div class="grid grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-3xl font-semibold text-yellow-400 mb-6">
+                        <i class="fas fa-palette mr-3"></i>Visual Design
+                    </h3>
+                    
+                    <div class="space-y-4">
+                        <div class="bg-gray-800 bg-opacity-80 rounded-lg p-4 border-l-4 border-red-400">
+                            <h4 class="text-xl font-semibold text-red-400 mb-2">Art Style</h4>
+                            <p class="text-gray-300">Semi-realistic với chút stylized, lấy cảm hứng từ nghệ thuật Trung Hoa cổ điển</p>
+                        </div>
+                        
+                        <div class="bg-gray-800 bg-opacity-80 rounded-lg p-4 border-l-4 border-blue-400">
+                            <h4 class="text-xl font-semibold text-blue-400 mb-2">Color Palette</h4>
+                            <ul class="text-gray-300 space-y-1">
+                                <li>• Vàng đồng và đỏ (sức mạnh)</li>
+                                <li>• Xanh lam và tím (bí ẩn)</li>
+                                <li>• Đen và xám (forgotten memories)</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-gray-800 bg-opacity-80 rounded-lg p-4 border-l-4 border-green-400">
+                            <h4 class="text-xl font-semibold text-green-400 mb-2">Lighting System</h4>
+                            <ul class="text-gray-300 space-y-1">
+                                <li>• Dynamic day/night cycle</li>
+                                <li>• Atmospheric volumetric lighting</li>
+                                <li>• Magical aura effects</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-gray-800 bg-opacity-80 rounded-lg p-4 border-l-4 border-purple-400">
+                            <h4 class="text-xl font-semibold text-purple-400 mb-2">Custom Shaders</h4>
+                            <ul class="text-gray-300 space-y-1">
+                                <li>• Transformation effects</li>
+                                <li>• Memory fragment visualization</li>
+                                <li>• Clone materialization shader</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-3xl font-semibold text-red-400 mb-6">
+                        <i class="fas fa-music mr-3"></i>Audio Design
+                    </h3>
+                    
+                    <div class="space-y-4">
+                        <div class="bg-gray-800 bg-opacity-80 rounded-lg p-4 border-l-4 border-yellow-400">
+                            <h4 class="text-xl font-semibold text-yellow-400 mb-2">Nhạc nền</h4>
+                            <ul class="text-gray-300 space-y-1">
+                                <li>• Traditional Chinese instruments</li>
+                                <li>• Orchestra hybrid với Erhu, Guzheng</li>
+                                <li>• Dynamic music theo cảm xúc</li>
+                                <li>• Leitmotif cho từng character</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-gray-800 bg-opacity-80 rounded-lg p-4 border-l-4 border-orange-400">
+                            <h4 class="text-xl font-semibold text-orange-400 mb-2">Sound Effects</h4>
+                            <ul class="text-gray-300 space-y-1">
+                                <li>• Như Ý staff whoosh và impact</li>
+                                <li>• Transformation sound layers</li>
+                                <li>• Environmental audio (wind, fire, water)</li>
+                                <li>• Magic spell casting effects</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-gray-800 bg-opacity-80 rounded-lg p-4 border-l-4 border-pink-400">
+                            <h4 class="text-xl font-semibold text-pink-400 mb-2">Voice Acting</h4>
+                            <ul class="text-gray-300 space-y-1">
+                                <li>• Wukong: Mạnh mẽ nhưng có vulnerability</li>
+                                <li>• Clone voices: Echo effect</li>
+                                <li>• Boss dialogue: Menacing + philosophical</li>
+                                <li>• Narrator: Elderly, wise storyteller</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-gray-800 bg-opacity-80 rounded-lg p-4 border-l-4 border-indigo-400">
+                            <h4 class="text-xl font-semibold text-indigo-400 mb-2">Audio Technology</h4>
+                            <ul class="text-gray-300 space-y-1">
+                                <li>• 3D spatial audio</li>
+                                <li>• Adaptive music system</li>
+                                <li>• Real-time audio occlusion</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 10: Công nghệ & công cụ -->
+    <div class="slide relative">
+        <div class="slide-number">10/15</div>
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-5xl font-bold gold-text mb-8 text-center">Công nghệ & Công cụ</h2>
+            
+            <div class="grid grid-cols-2 gap-8">
+                <div>
+                    <h3 class="text-3xl font-semibold text-yellow-400 mb-6">
+                        <i class="fas fa-cogs mr-3"></i>Engine & Core Tech
+                    </h3>
+                    
+                    <div class="space-y-4">
+                        <div class="bg-gray-800 bg-opacity-80 rounded-lg p-6 border-2 border-blue-400">
+                            <div class="flex items-center mb-4">
+                                <div class="text-4xl text-blue-400 mr-4">
+                                    <i class="fab fa-unity"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-2xl font-semibold text-blue-400">Unity 2022.3 LTS</h4>
+                                    <p class="text-gray-300">Stability + latest features</p>
+                                </div>
+                            </div>
+                            <ul class="text-gray-300 space-y-1">
+                                <li>• Cross-platform deployment</li>
+                                <li>• Robust physics system (Havok)</li>
+                                <li>• Advanced AI frameworks</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-gray-800 bg-opacity-80 rounded-lg p-6 border-2 border-purple-400">
+                            <div class="flex items-center mb-4">
+                                <div class="text-4xl text-purple-400 mr-4">
+                                    <i class="fas fa-eye"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-2xl font-semibold text-purple-400">HDRP Pipeline</h4>
+                                    <p class="text-gray-300">High-fidelity rendering</p>
+                                </div>
+                            </div>
+                            <ul class="text-gray-300 space-y-1">
+                                <li>• Real-time ray tracing</li>
+                                <li>• Advanced lighting & shadows</li>
+                                <li>• Post-processing stack</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-gray-800 bg-opacity-80 rounded-lg p-6 border-2 border-green-400">
+                            <div class="flex items-center mb-4">
+                                <div class="text-4xl text-green-400 mr-4">
+                                    <i class="fas fa-video"></i>
+                                </div>
+                                <div>
+                                    <h4 class="text-2xl font-semibold text-green-400">Cinemachine</h4>
+                                    <p class="text-gray-300">Cinematic camera system</p>
+                                </div>
+                            </div>
+                            <ul class="text-gray-300 space-y-1">
+                                <li>• Dynamic camera following</li>
+                                <li>• Smooth transitions</li>
+                                <li>• Cutscene automation</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-3xl font-semibold text-red-400 mb-6">
+                        <i class="fas fa-tools mr-3"></i>Development Workflow
+                    </h3>
+                    
+                    <div class="space-y-4">
+                        <div class="bg-gray-800 bg-opacity-80 rounded-lg p-4 border-l-4 border-yellow-400">
+                            <h4 class="text-xl font-semibold text-yellow-400 mb-2">3D Modeling</h4>
+                            <ul class="text-gray-300 space-y-1">
+                                <li>• <strong>Blender:</strong> Character modeling & animation</li>
+                                <li>• <strong>Maya:</strong> Complex rigging system</li>
+                                <li>• <strong>ZBrush:</strong> High-detail sculpting</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-gray-800 bg-opacity-80 rounded-lg p-4 border-l-4 border-orange-400">
+                            <h4 class="text-xl font-semibold text-orange-400 mb-2">Texturing & Materials</h4>
+                            <ul class="text-gray-300 space-y-1">
+                                <li>• <strong>Substance Painter:</strong> PBR texturing</li>
+                                <li>• <strong>Photoshop:</strong> 2D assets & UI</li>
+                                <li>• <strong>Shader Graph:</strong> Custom visual effects</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-gray-800 bg-opacity-80 rounded-lg p-4 border-l-4 border-green-400">
+                            <h4 class="text-xl font-semibold text-green-400 mb-2">Animation Pipeline</h4>
+                            <ul class="text-gray-300 space-y-1">
+                                <li>• <strong>Timeline:</strong> Cutscene sequencing</li>
+                                <li>• <strong>Animator Controller:</strong> State machines</li>
+                                <li>• <strong>Mocap data:</strong> Realistic movement</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-gray-800 bg-opacity-80 rounded-lg p-4 border-l-4 border-blue-400">
+                            <h4 class="text-xl font-semibold text-blue-400 mb-2">Code & Version Control</h4>
+                            <ul class="text-gray-300 space-y-1">
+                                <li>• <strong>C# Scripts:</strong> Game logic & mechanics</li>
+                                <li>• <strong>Git + Unity Collaborate:</strong> Team sync</li>
+                                <li>• <strong>Visual Studio:</strong> Code development</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-gray-800 bg-opacity-80 rounded-lg p-4 border-l-4 border-red-400">
+                            <h4 class="text-xl font-semibold text-red-400 mb-2">Audio Integration</h4>
+                            <ul class="text-gray-300 space-y-1">
+                                <li>• <strong>FMOD:</strong> Advanced audio system</li>
+                                <li>• <strong>Audacity:</strong> Sound editing</li>
+                                <li>• <strong>Unity Audio Mixer:</strong> Dynamic mixing</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 11: Demo Screenshots -->
+    <div class="slide relative">
+        <div class="slide-number">11/15</div>
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-5xl font-bold gold-text mb-8 text-center">Demo & Gameplay Screenshots</h2>
+            
+            <div class="grid grid-cols-2 gap-8 mb-8">
+                <div class="bg-gray-800 bg-opacity-50 rounded-2xl p-6 border-2 border-yellow-400">
+                    <div class="h-64 bg-gradient-to-br from-yellow-900 to-red-900 rounded-lg mb-4 flex items-center justify-center">
+                        <div class="text-center text-white">
+                            <i class="fas fa-fist-raised text-6xl mb-4"></i>
+                            <h3 class="text-2xl font-bold">Combat System</h3>
+                            <p class="text-lg">Wukong vs Shadow Clone</p>
+                        </div>
+                    </div>
+                    <h4 class="text-xl font-semibold text-yellow-400 mb-2">Dynamic Combat</h4>
+                    <p class="text-gray-300">
+                        Showcase combo system với multiple clones, particle effects, 
+                        và responsive enemy AI adaptation trong real-time.
+                    </p>
+                </div>
+                
+                <div class="bg-gray-800 bg-opacity-50 rounded-2xl p-6 border-2 border-blue-400">
+                    <div class="h-64 bg-gradient-to-br from-blue-900 to-purple-900 rounded-lg mb-4 flex items-center justify-center">
+                        <div class="text-center text-white">
+                            <i class="fas fa-puzzle-piece text-6xl mb-4"></i>
+                            <h3 class="text-2xl font-bold">Puzzle Mechanics</h3>
+                            <p class="text-lg">Mirror World Navigation</p>
+                        </div>
+                    </div>
+                    <h4 class="text-xl font-semibold text-blue-400 mb-2">Environmental Puzzle</h4>
+                    <p class="text-gray-300">
+                        Clone cooperation để giải puzzle trong Mirror World, 
+                        sử dụng transformation abilities và physics-based solutions.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="bg-gray-800 bg-opacity-50 rounded-2xl p-6 border-2 border-green-400">
+                <div class="h-80 bg-gradient-to-br from-green-900 to-yellow-900 rounded-lg mb-4 flex items-center justify-center">
+                    <div class="text-center text-white">
+                        <i class="fas fa-mountain text-8xl mb-4"></i>
+                        <h3 class="text-3xl font-bold">Thuỷ Liêm Động - Starting Area</h3>
+                        <p class="text-xl">Cinematic opening sequence</p>
+                    </div>
+                </div>
+                <h4 class="text-2xl font-semibold text-green-400 mb-4 text-center">Level Design Showcase</h4>
+                <div class="grid grid-cols-3 gap-6 text-center">
+                    <div>
+                        <h5 class="text-lg font-semibold text-yellow-400 mb-2">Visual Fidelity</h5>
+                        <p class="text-gray-300">HDRP lighting, volumetric fog, detailed textures</p>
+                    </div>
+                    <div>
+                        <h5 class="text-lg font-semibold text-red-400 mb-2">Interactive Elements</h5>
+                        <p class="text-gray-300">Memory fragments, hidden passages, destructible objects</p>
+                    </div>
+                    <div>
+                        <h5 class="text-lg font-semibold text-blue-400 mb-2">Atmospheric Design</h5>
+                        <p class="text-gray-300">Dynamic weather, day/night cycle, particle systems</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-8 text-center">
+                <p class="text-xl text-gray-300">
+                    <i class="fas fa-play-circle text-green-400 mr-2"></i>
+                    <strong>Live Demo Available:</strong> 15-minute gameplay demonstration 
+                    showcasing core mechanics, AI systems, and visual quality
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 12: Thử thách & giải pháp -->
+    <div class="slide relative">
+        <div class="slide-number">12/15</div>
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-5xl font-bold gold-text mb-8 text-center">Thử thách Kỹ thuật & Giải pháp</h2>
+            
+            <div class="space-y-8">
+                <div class="grid grid-cols-2 gap-8">
+                    <div class="bg-red-900 bg-opacity-30 rounded-2xl p-6 border-2 border-red-400">
+                        <h3 class="text-2xl font-semibold text-red-400 mb-4">
+                            <i class="fas fa-exclamation-triangle mr-3"></i>Collision Detection Issues
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="bg-gray-800 bg-opacity-60 rounded-lg p-4">
+                                <h4 class="text-lg font-semibold text-red-300 mb-2">Vấn đề:</h4>
+                                <p class="text-gray-300">
+                                    Clone AI và transformations gây ra collision conflicts, 
+                                    đặc biệt khi multiple clones cùng tương tác với environment.
+                                </p>
+                            </div>
+                            <div class="bg-gray-800 bg-opacity-60 rounded-lg p-4">
+                                <h4 class="text-lg font-semibold text-green-300 mb-2">Giải pháp:</h4>
+                                <ul class="text-gray-300 space-y-1">
+                                    <li>• Implement layered collision system</li>
+                                    <li>• Separate collision layers cho clone entities</li>
+                                    <li>• Custom Physics Materials với specific properties</li>
+                                    <li>• Real-time collision priority management</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-purple-900 bg-opacity-30 rounded-2xl p-6 border-2 border-purple-400">
+                        <h3 class="text-2xl font-semibold text-purple-400 mb-4">
+                            <i class="fas fa-brush mr-3"></i>Custom Shader Complexity
+                        </h3>
+                        <div class="space-y-4">
+                            <div class="bg-gray-800 bg-opacity-60 rounded-lg p-4">
+                                <h4 class="text-lg font-semibold text-red-300 mb-2">Vấn đề:</h4>
+                                <p class="text-gray-300">
+                                    Transformation effects và memory visualization shaders 
+                                    gây performance bottleneck trên mid-range hardware.
+                                </p>
+                            </div>
+                            <div class="bg-gray-800 bg-opacity-60 rounded-lg p-4">
+                                <h4 class="text-lg font-semibold text-green-300 mb-2">Giải pháp:</h4>
+                                <ul class="text-gray-300 space-y-1">
+                                    <li>• LOD system cho shader complexity</li>
+                                    <li>• Shader variants cho different quality settings</li>
+                                    <li>• GPU instancing cho particle effects</li>
+                                    <li>• Texture streaming optimization</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-blue-900 bg-opacity-30 rounded-2xl p-6 border-2 border-blue-400">
+                    <h3 class="text-2xl font-semibold text-blue-400 mb-4 text-center">
+                        <i class="fas fa-tachometer-alt mr-3"></i>Performance Optimization Challenges
+                    </h3>
+                    <div class="grid grid-cols-3 gap-6">
+                        <div>
+                            <h4 class="text-lg font-semibold text-yellow-400 mb-3">AI Processing Load</h4>
+                            <div class="bg-gray-800 bg-opacity-60 rounded-lg p-4 mb-3">
+                                <p class="text-sm text-red-300 mb-2">Vấn đề:</p>
+                                <p class="text-gray-300 text-sm">Multiple AI entities causing frame drops</p>
+                            </div>
+                            <div class="bg-gray-800 bg-opacity-60 rounded-lg p-4">
+                                <p class="text-sm text-green-300 mb-2">Giải pháp:</p>
+                                <ul class="text-gray-300 text-sm space-y-1">
+                                    <li>• AI behavior threading</li>
+                                    <li>• Update frequency scaling</li>
+                                    <li>• Spatial partitioning</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-lg font-semibold text-yellow-400 mb-3">Memory Management</h4>
+                            <div class="bg-gray-800 bg-opacity-60 rounded-lg p-4 mb-3">
+                                <p class="text-sm text-red-300 mb-2">Vấn đề:</p>
+                                <p class="text-gray-300 text-sm">Large texture assets causing memory leaks</p>
+                            </div>
+                            <div class="bg-gray-800 bg-opacity-60 rounded-lg p-4">
+                                <p class="text-sm text-green-300 mb-2">Giải pháp:</p>
+                                <ul class="text-gray-300 text-sm space-y-1">
+                                    <li>• Asset bundling system</li>
+                                    <li>• Automatic garbage collection</li>
+                                    <li>• Texture compression</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-lg font-semibold text-yellow-400 mb-3">Rendering Pipeline</h4>
+                            <div class="bg-gray-800 bg-opacity-60 rounded-lg p-4 mb-3">
+                                <p class="text-sm text-red-300 mb-2">Vấn đề:</p>
+                                <p class="text-gray-300 text-sm">HDRP overhead on lower-end systems</p>
+                            </div>
+                            <div class="bg-gray-800 bg-opacity-60 rounded-lg p-4">
+                                <p class="text-sm text-green-300 mb-2">Giải pháp:</p>
+                                <ul class="text-gray-300 text-sm space-y-1">
+                                    <li>• Scalable quality settings</li>
+                                    <li>• Dynamic resolution scaling</li>
+                                    <li>• Culling optimizations</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-gray-800 bg-opacity-80 rounded-2xl p-6 border-2 border-green-400">
+                    <h3 class="text-2xl font-semibold text-green-400 mb-4 text-center">
+                        <i class="fas fa-trophy mr-3"></i>Lessons Learned & Future Improvements
+                    </h3>
+                    <div class="grid grid-cols-2 gap-8">
+                        <div>
+                            <h4 class="text-lg font-semibold text-yellow-400 mb-3">Key Takeaways:</h4>
+                            <ul class="text-gray-300 space-y-2">
+                                <li>• Early optimization tránh technical debt</li>
+                                <li>• Modular architecture giúp debug dễ dàng</li>
+                                <li>• User testing sớm để detect issues</li>
+                                <li>• Documentation quan trọng cho team work</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-semibold text-blue-400 mb-3">Future Tech Goals:</h4>
+                            <ul class="text-gray-300 space-y-2">
+                                <li>• Machine Learning cho advanced AI</li>
+                                <li>• Procedural animation blending</li>
+                                <li>• Real-time ray tracing implementation</li>
+                                <li>• Cloud save & cross-platform sync</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 13: Kế hoạch phát triển -->
+    <div class="slide relative">
+        <div class="slide-number">13/15</div>
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-5xl font-bold gold-text mb-8 text-center">Kế hoạch Phát triển Tương lai</h2>
+            
+            <div class="grid grid-cols-2 gap-8 mb-8">
+                <div>
+                    <h3 class="text-3xl font-semibold text-yellow-400 mb-6">
+                        <i class="fas fa-road mr-3"></i>Development Roadmap
+                    </h3>
+                    
+                    <div class="space-y-4">
+                        <div class="bg-green-900 bg-opacity-40 rounded-lg p-4 border-l-4 border-green-400">
+                            <h4 class="text-lg font-semibold text-green-400 mb-2">
+                                <i class="fas fa-check-circle mr-2"></i>Phase 1 - Core Game (Completed)
+                            </h4>
+                            <ul class="text-gray-300 text-sm space-y-1">
+                                <li>• 5 main chapters với complete storyline</li>
+                                <li>• Basic AI systems và combat mechanics</li>
+                                <li>• Foundation systems (save, UI, settings)</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-blue-900 bg-opacity-40 rounded-lg p-4 border-l-4 border-blue-400">
+                            <h4 class="text-lg font-semibold text-blue-400 mb-2">
+                                <i class="fas fa-cog mr-2"></i>Phase 2 - Polish & Expansion (6 months)
+                            </h4>
+                            <ul class="text-gray-300 text-sm space-y-1">
+                                <li>• Advanced AI behaviors và dynamic difficulty</li>
+                                <li>• Additional side quests và secret areas</li>
+                                <li>• Performance optimization across platforms</li>
+                                <li>• Multiplayer co-op mode prototype</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-purple-900 bg-opacity-40 rounded-lg p-4 border-l-4 border-purple-400">
+                            <h4 class="text-lg font-semibold text-purple-400 mb-2">
+                                <i class="fas fa-rocket mr-2"></i>Phase 3 - Platform Expansion (12 months)
+                            </h4>
+                            <ul class="text-gray-300 text-sm space-y-1">
+                                <li>• Console ports (PlayStation, Xbox, Nintendo Switch)</li>
+                                <li>• Mobile version với adapted controls</li>
+                                <li>• VR mode experimental implementation</li>
+                                <li>• Cloud gaming optimization</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-3xl font-semibold text-red-400 mb-6">
+                        <i class="fas fa-plus-circle mr-3"></i>Content Expansions
+                    </h3>
+                    
+                    <div class="space-y-4">
+                        <div class="bg-gray-800 bg-opacity-80 rounded-lg p-6 border-2 border-yellow-400">
+                            <h4 class="text-xl font-semibold text-yellow-400 mb-3">DLC: "Journey to the West - Prequel"</h4>
+                            <ul class="text-gray-300 space-y-2">
+                                <li>• Original Tây Du story với companions</li>
+                                <li>• Tam Tạng, Trư Bát Giới, Sa Tăng as playable</li>
+                                <li>• Co-op campaign mode</li>
+                                <li>• 10+ hours additional content</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-gray-800 bg-opacity-80 rounded-lg p-6 border-2 border-blue-400">
+                            <h4 class="text-xl font-semibold text-blue-400 mb-3">DLC: "Multiverse Chronicles"</h4>
+                            <ul class="text-gray-300 space-y-2">
+                                <li>• Alternative timeline stories</li>
+                                <li>• Different versions of Wukong</li>
+                                <li>• Crossover với other mythologies</li>
+                                <li>• Procedural challenge modes</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-gray-800 bg-opacity-80 rounded-lg p-6 border-2 border-green-400">
+                            <h4 class="text-xl font-semibold text-green-400 mb-3">Community Features</h4>
+                            <ul class="text-gray-300 space-y-2">
+                                <li>• Level editor cho user-generated content</li>
+                                <li>• Boss fight sharing system</li>
+                                <li>• Leaderboards và achievements</li>
+                                <li>• Modding support framework</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gray-800 bg-opacity-80 rounded-2xl p-8 border-2 border-purple-400">
+                <h3 class="text-3xl font-semibold text-purple-400 mb-6 text-center">
+                    <i class="fas fa-globe mr-3"></i>Long-term Vision
+                </h3>
+                <div class="grid grid-cols-3 gap-6 text-center">
+                    <div>
+                        <div class="text-5xl text-yellow-400 mb-4">
+                            <i class="fas fa-gamepad"></i>
+                        </div>
+                        <h4 class="text-xl font-semibold text-yellow-400 mb-2">Franchise Development</h4>
+                        <p class="text-gray-300">Expand thành series với different mythological characters</p>
+                    </div>
+                    <div>
+                        <div class="text-5xl text-green-400 mb-4">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h4 class="text-xl font-semibold text-green-400 mb-2">Community Building</h4>
+                        <p class="text-gray-300">Active player community với regular events và tournaments</p>
+                    </div>
+                    <div>
+                        <div class="text-5xl text-blue-400 mb-4">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <h4 class="text-xl font-semibold text-blue-400 mb-2">Educational Impact</h4>
+                        <p class="text-gray-300">Promote Asian culture và mythology through interactive gaming</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 14: Kết luận & Thông điệp -->
+    <div class="slide relative">
+        <div class="slide-number">14/15</div>
+        <div class="max-w-6xl mx-auto">
+            <h2 class="text-5xl font-bold gold-text mb-8 text-center">Kết luận & Thông điệp</h2>
+            
+            <div class="grid grid-cols-2 gap-8 mb-8">
+                <div>
+                    <h3 class="text-3xl font-semibold text-yellow-400 mb-6">
+                        <i class="fas fa-heart mr-3"></i>Triết lý của Game
+                    </h3>
+                    
+                    <div class="space-y-4">
+                        <div class="bg-gray-800 bg-opacity-80 rounded-lg p-6 border-l-4 border-red-400">
+                            <h4 class="text-xl font-semibold text-red-400 mb-3">Sức mạnh thật sự</h4>
+                            <p class="text-gray-300 leading-relaxed">
+                                Không nằm ở vũ khí hay phép thuật, mà ở trong trái tim và ý chí 
+                                không khuất phục. Wukong học được rằng sức mạnh lớn nhất là 
+                                sự chấp nhận và yêu thương bản thân.
+                            </p>
+                        </div>
+                        
+                        <div class="bg-gray-800 bg-opacity-80 rounded-lg p-6 border-l-4 border-blue-400">
+                            <h4 class="text-xl font-semibold text-blue-400 mb-3">Hành trình tự khám phá</h4>
+                            <p class="text-gray-300 leading-relaxed">
+                                Mỗi thử thách trong game phản ánh những thử thách trong cuộc sống thực. 
+                                Người chơi không chỉ giúp Wukong tìm lại sức mạnh, mà còn tự 
+                                khám phá ra những điều về chính mình.
+                            </p>
+                        </div>
+                        
+                        <div class="bg-gray-800 bg-opacity-80 rounded-lg p-6 border-l-4 border-green-400">
+                            <h4 class="text-xl font-semibold text-green-400 mb-3">Cân bằng nội tâm</h4>
+                            <p class="text-gray-300 leading-relaxed">
+                                Game thể hiện tầm quan trọng của việc chấp nhận cả mặt sáng 
+                                lẫn mặt tối trong bản thân. Sức mạnh đến từ sự hòa hợp, 
+                                không phải từ việc phủ nhận.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-3xl font-semibold text-blue-400 mb-6">
+                        <i class="fas fa-star mr-3"></i>Ý nghĩa Giáo dục
+                    </h3>
+                    
+                    <div class="space-y-4">
+                        <div class="bg-blue-900 bg-opacity-40 rounded-lg p-4 border-2 border-blue-400">
+                            <h4 class="text-lg font-semibold text-blue-300 mb-2">Văn hóa Truyền thống</h4>
+                            <p class="text-gray-300">Giới thiệu thần thoại Á Đông đến game thủ quốc tế</p>
+                        </div>
+                        
+                        <div class="bg-purple-900 bg-opacity-40 rounded-lg p-4 border-2 border-purple-400">
+                            <h4 class="text-lg font-semibold text-purple-300 mb-2">Tư duy Phản biện</h4>
+                            <p class="text-gray-300">Khuyến khích suy nghĩ sâu về bản chất sức mạnh</p>
+                        </div>
+                        
+                        <div class="bg-green-900 bg-opacity-40 rounded-lg p-4 border-2 border-green-400">
+                            <h4 class="text-lg font-semibold text-green-300 mb-2">Emotional Intelligence</h4>
+                            <p class="text-gray-300">Phát triển khả năng hiểu và quản lý cảm xúc</p>
+                        </div>
+                        
+                        <div class="bg-yellow-900 bg-opacity-40 rounded-lg p-4 border-2 border-yellow-400">
+                            <h4 class="text-lg font-semibold text-yellow-300 mb-2">Problem Solving</h4>
+                            <p class="text-gray-300">Rèn luyện kỹ năng giải quyết vấn đề sáng tạo</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 text-center">
+                        <div class="text-6xl text-purple-400 mb-4">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
+                        <p class="text-lg text-gray-300 italic">
+                            "Gaming as a medium for meaningful learning and personal growth"
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-r from-yellow-900 to-red-900 rounded-3xl p-8 border-4 border-gold text-center">
+                <h3 class="text-4xl font-bold gold-text mb-6">Thông điệp Cuối cùng</h3>
+                <div class="text-3xl text-white leading-relaxed mb-6">
+                    <p class="mb-4">
+                        "Cây gậy Như Ý không bao giờ thực sự biến mất..."
+                    </p>
+                    <p class="mb-4">
+                        "Nó chỉ đang chờ đợi người thật sự xứng đáng..."
+                    </p>
+                    <p class="text-4xl font-bold gold-text">
+                        "Không phải tay, mà là trái tim."
+                    </p>
+                </div>
+                <div class="text-xl text-gray-200 italic">
+                    <p>Game không chỉ là giải trí, mà là một hành trình khám phá bản thân.</p>
+                    <p>Mỗi người chơi sẽ tìm thấy câu trả lời riêng của mình.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 15: Cảm ơn -->
+    <div class="slide relative">
+        <div class="slide-number">15/15</div>
+        <div class="max-w-6xl mx-auto text-center">
+            <div class="mb-12">
+                <h1 class="text-8xl font-black gold-text mb-4">CẢM ƠN</h1>
+                <h2 class="text-3xl text-gray-300">Thank you for your attention</h2>
+            </div>
+            
+            <div class="grid grid-cols-2 gap-12 mb-12">
+                <div>
+                    <h3 class="text-3xl font-semibold text-yellow-400 mb-6">
+                        <i class="fas fa-users mr-3"></i>Team Monkey King
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="bg-gray-800 bg-opacity-60 rounded-lg p-4">
+                            <h4 class="text-xl font-semibold text-blue-400 mb-2">Development Team</h4>
+                            <ul class="text-gray-300 text-lg space-y-1">
+                                <li>• Game Designer & Programmer</li>
+                                <li>• 3D Artist & Animator</li>
+                                <li>• AI Systems Developer</li>
+                                <li>• Sound Designer & Composer</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-gray-800 bg-opacity-60 rounded-lg p-4">
+                            <h4 class="text-xl font-semibold text-green-400 mb-2">Special Thanks</h4>
+                            <ul class="text-gray-300 text-lg space-y-1">
+                                <li>• Giảng viên hướng dẫn</li>
+                                <li>• Khoa Công nghệ Thông tin</li>
+                                <li>• Beta testers & Community</li>
+                                <li>• Gia đình và bạn bè</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-3xl font-semibold text-red-400 mb-6">
+                        <i class="fas fa-envelope mr-3"></i>Liên hệ & Thông tin
+                    </h3>
+                    <div class="space-y-4">
+                        <div class="bg-gray-800 bg-opacity-60 rounded-lg p-4">
+                            <h4 class="text-xl font-semibold text-purple-400 mb-2">Contact Information</h4>
+                            <ul class="text-gray-300 text-lg space-y-2">
+                                <li>
+                                    <i class="fas fa-envelope text-blue-400 mr-2"></i>
+                                    teammonkeyking@university.edu
+                                </li>
+                                <li>
+                                    <i class="fab fa-github text-gray-400 mr-2"></i>
+                                    github.com/teammonkeyking/wukong
+                                </li>
+                                <li>
+                                    <i class="fas fa-globe text-green-400 mr-2"></i>
+                                    wukong-game.dev
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="bg-gray-800 bg-opacity-60 rounded-lg p-4">
+                            <h4 class="text-xl font-semibold text-yellow-400 mb-2">Demo & Resources</h4>
+                            <ul class="text-gray-300 text-lg space-y-2">
+                                <li>• Playable demo available</li>
+                                <li>• Source code documentation</li>
+                                <li>• Technical design documents</li>
+                                <li>• Art & asset galleries</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gray-800 bg-opacity-80 rounded-2xl p-8 border-2 border-yellow-400">
+                <div class="text-6xl text-yellow-400 mb-6">
+                    <i class="fas fa-mask"></i>
+                </div>
+                <h3 class="text-2xl font-semibold text-yellow-400 mb-4">
+                    "Hành trình ngàn dặm bắt đầu từ bước chân đầu tiên"
+                </h3>
+                <p class="text-xl text-gray-300 mb-6">
+                    Cảm ơn quý thầy cô và các bạn đã lắng nghe và ủng hộ dự án "Wukong: The Lost Power". 
+                    Chúng em hy vọng game sẽ mang đến những trải nghiệm ý nghĩa và giúp lan tỏa 
+                    vẻ đẹp của văn hóa truyền thống qua ngôn ngữ game hiện đại.
+                </p>
+                
+                <div class="text-3xl font-bold gold-text">
+                    Q&A SESSION
+                </div>
+                <p class="text-lg text-gray-400 mt-2">
+                    Chúng em sẵn sàng trả lời các câu hỏi của quý thầy cô
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add smooth scrolling animation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add fade-in effect for slides
+            const slides = document.querySelectorAll('.slide');
+            
+            function checkSlideVisibility() {
+                slides.forEach(slide => {
+                    const slideTop = slide.offsetTop;
+                    const slideBottom = slideTop + slide.offsetHeight;
+                    const scrollTop = window.scrollY;
+                    const windowHeight = window.innerHeight;
+                    
+                    if (scrollTop < slideBottom && scrollTop + windowHeight > slideTop) {
+                        slide.style.opacity = '1';
+                        slide.style.transform = 'translateY(0)';
+                    }
+                });
+            }
+            
+            // Initial setup
+            slides.forEach(slide => {
+                slide.style.opacity = '0';
+                slide.style.transform = 'translateY(50px)';
+                slide.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            });
+            
+            // Check visibility on scroll
+            window.addEventListener('scroll', checkSlideVisibility);
+            checkSlideVisibility(); // Initial check
+            
+            // Add print-friendly styles
+            const style = document.createElement('style');
+            style.textContent = `
+                @media print {
+                    body { font-size: 12pt; }
+                    .slide { 
+                        page-break-inside: avoid;
+                        margin-bottom: 2rem;
+                        opacity: 1 !important;
+                        transform: none !important;
+                    }
+                    .slide-number { display: none; }
+                }
+            `;
+            document.head.appendChild(style);
+        });
+    </script>
+</body>
+</html>
